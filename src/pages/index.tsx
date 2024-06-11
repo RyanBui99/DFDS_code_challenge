@@ -1,4 +1,9 @@
-import { InvalidateQueryFilters, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { format } from "date-fns";
 import Head from "next/head";
 import Layout from "~/components/layout";
@@ -14,15 +19,17 @@ import { fetchData } from "~/utils";
 import type { ReturnType } from "./api/voyage/getAll";
 import { Button } from "~/components/ui/button";
 import { TABLE_DATE_FORMAT } from "~/constants";
+import Sheet from "~/components/atoms/Sheet";
+import { CreateVoyageForm } from "~/components/form";
+import { useState } from "react";
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
   const { data: voyages } = useQuery<ReturnType>({
     queryKey: ["voyages"],
 
-    queryFn: () =>
-      fetchData("voyage/getAll")
+    queryFn: () => fetchData("voyage/getAll"),
   });
-
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -35,11 +42,12 @@ export default function Home() {
         throw new Error("Failed to delete the voyage");
       }
     },
-   	onSuccess: async () => {
-        await queryClient.invalidateQueries(["voyages"] as InvalidateQueryFilters);
-      },
-    }
-  );
+    onSuccess: async () => {
+      await queryClient.invalidateQueries([
+        "voyages",
+      ] as InvalidateQueryFilters);
+    },
+  });
 
   const handleDelete = (voyageId: string) => {
     mutation.mutate(voyageId);
@@ -54,6 +62,16 @@ export default function Home() {
       <Layout>
         <Table>
           <TableHeader>
+            <Sheet
+              buttonTitle="Create"
+              title="Lorem ipsum"
+              description="Lorem ipsum"
+              open={open}
+              setOpen={setOpen}
+            >
+              <CreateVoyageForm setOpen={setOpen} />
+            </Sheet>
+
             <TableRow>
               <TableHead>Departure</TableHead>
               <TableHead>Arrival</TableHead>
@@ -69,7 +87,7 @@ export default function Home() {
                 <TableCell>
                   {format(
                     new Date(voyage.scheduledDeparture),
-                    TABLE_DATE_FORMAT
+                    TABLE_DATE_FORMAT,
                   )}
                 </TableCell>
                 <TableCell>
