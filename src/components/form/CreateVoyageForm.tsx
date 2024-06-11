@@ -13,6 +13,7 @@ import useDfdsApi from "~/client/DfdsApi";
 import { useToast } from "../ui/use-toast";
 import { VesselsType } from "~/pages/api/vessel/getAll";
 import { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { VesselsUnitType } from "~/pages/api/unitType/getAll";
 
 type FormData = TFormData<{
   departure: Date;
@@ -20,7 +21,7 @@ type FormData = TFormData<{
   portOfLoading: string;
   portOfDischarge: string;
   vessel: string;
-  // unitTypes: string[];
+  unitTypes: string[];
 }>;
 
 interface CreateVoyageFormProps {
@@ -37,6 +38,12 @@ const CreateVoyageForm: FunctionComponent<CreateVoyageFormProps> = ({
   const vesselQuery = useQuery<VesselsType>({
     queryKey: ["vessels"],
     queryFn: () => dfdsApi.getVessels(),
+    initialData: [],
+  });
+
+  const unitTypeQuery = useQuery<VesselsUnitType, Error>({
+    queryKey: ["unitType"],
+    queryFn: () => dfdsApi.getUnitTypes(),
     initialData: [],
   });
 
@@ -66,7 +73,7 @@ const CreateVoyageForm: FunctionComponent<CreateVoyageFormProps> = ({
           portOfLoading: "",
           portOfDischarge: "",
           vessel: "-",
-          //   unitTypes: [],
+          unitTypes: [],
         },
       }}
       schema={z
@@ -80,7 +87,9 @@ const CreateVoyageForm: FunctionComponent<CreateVoyageFormProps> = ({
             .string()
             .min(1, { message: "Port of Discharge is required" }),
           vessel: z.string().min(1, { message: "Vessel is required" }),
-          // unitTypes: z.array(z.string()),
+          unitTypes: z.array(z.string()).refine((value) => value.length >= 5, {
+            message: "You have to select at least five Unit Types",
+          }),
         })
         .refine(({ arrival, departure }) => arrival > departure, {
           message: "Departure must be before Arrival",
@@ -112,6 +121,16 @@ const CreateVoyageForm: FunctionComponent<CreateVoyageFormProps> = ({
                 value: vessel.value,
                 label: vessel.label,
               }))}
+            />
+            <FormSelectField
+              name="unitTypes"
+              label="Unit Types"
+              options={unitTypeQuery.data.map((unitType) => ({
+                value: unitType.id,
+                label: unitType.name,
+              }))}
+              description="Select at least 5 unit types."
+              isMulti
             />
 
             <SheetFooter>
