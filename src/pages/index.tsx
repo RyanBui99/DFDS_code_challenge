@@ -23,8 +23,11 @@ import Sheet from "~/components/atoms/Sheet";
 import { CreateVoyageForm } from "~/components/form";
 import { useState } from "react";
 import { Popover } from "~/components/atoms";
+import { useToast } from "~/components/ui/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
+
   const [open, setOpen] = useState(false);
   const { data: voyages } = useQuery<ReturnType>({
     queryKey: ["voyages"],
@@ -40,7 +43,40 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete the voyage");
+        switch (response.status) {
+          case 400:
+            toast({
+              variant: "destructive",
+              title: "Error: Could not delete voyage.",
+              description: `A problem occured while attempting to delete voyage (id: ${voyageId}).`,
+            });
+            throw new Error(
+              "Failed to delete the voyage due to a random error.",
+            );
+          case 404:
+            toast({
+              variant: "destructive",
+              title: "Error: Could not delete voyage.",
+              description: `The voyage with the specified ID was not found (id: ${voyageId}).`,
+            });
+            throw new Error("The voyage with the specified ID was not found.");
+          case 405:
+            toast({
+              variant: "destructive",
+              title: "Method Not Allowed",
+              description: `Only DELETE method is supported on this endpoint.`,
+            });
+            throw new Error(
+              "Method Not Allowed. Only DELETE method is supported on this endpoint.",
+            );
+          default:
+            throw new Error("Failed to delete the voyage");
+        }
+      } else {
+        toast({
+          variant: "default",
+          description: `Voyage succesfully deleted.`,
+        });
       }
     },
     onSuccess: async () => {

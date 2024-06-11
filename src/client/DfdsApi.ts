@@ -1,9 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
 import { useRef } from "react";
-// import type { NewVoyage } from "~/components/newVoyageForm";
 import type { VesselsUnitType } from "~/pages/api/unitType/getAll";
 import type { VesselsType } from "~/pages/api/vessel/getAll";
-import type { ReturnType } from "~/pages/api/voyage/getAll";
 export class DfdsApi {
   private instance: AxiosInstance;
 
@@ -28,31 +26,14 @@ export class DfdsApi {
     return this.get<VesselsType>("/api/vessel/getAll");
   }
 
-  public async getVoyages() {
-    return this.get<ReturnType>("/api/voyage/getAll");
-  }
-
   public async createVoyage(voyage: object) {
     const path = "/api/voyage/create";
-    console.log(voyage);
-    const { data, status } = await this.instance.post(path, {
-      ...voyage,
-      unitTypes: ["20FL", "40FL"],
-    });
+    const { data, status } = await this.instance.post(path, voyage);
 
     if (!(status < 300)) {
       throw new Error(`Error connection to ${path}: ${status}`);
     }
 
-    return data;
-  }
-
-  public async deleteVoyage(id: string) {
-    const path = `/api/voyage/delete/${id}`;
-    const { data, status } = await this.instance.delete<undefined>(path);
-    if (!(status < 300)) {
-      throw new Error(`Error connection to ${path}: ${status}`);
-    }
     return data;
   }
 }
