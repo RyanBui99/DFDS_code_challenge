@@ -2,7 +2,7 @@ import { UnitType } from "@prisma/client";
 import type { NextApiHandler, NextApiResponse } from "next";
 import { prisma } from "~/server/db";
 
-export type VesselsType = UnitType[];
+export type VesselsUnitType = UnitType[];
 
 /**
  * @swagger
@@ -39,7 +39,7 @@ export type VesselsType = UnitType[];
  */
 const handler: NextApiHandler = async (
   _,
-  res: NextApiResponse<VesselsType>,
+  res: NextApiResponse<VesselsUnitType>,
 ) => {
   const allUnitTypes: UnitType[] = await prisma.unitType.findMany();
   res.status(200).json(allUnitTypes);
