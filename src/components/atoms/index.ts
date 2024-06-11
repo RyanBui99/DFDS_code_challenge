@@ -1,4 +1,5 @@
 import Sheet from "./Sheet";
 import DatePicker from "./DatePicker";
+import Popover from "./Popover";
 
-export { Sheet, DatePicker };
+export { Sheet, DatePicker, Popover };

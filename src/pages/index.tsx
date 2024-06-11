@@ -22,6 +22,7 @@ import { TABLE_DATE_FORMAT } from "~/constants";
 import Sheet from "~/components/atoms/Sheet";
 import { CreateVoyageForm } from "~/components/form";
 import { useState } from "react";
+import { Popover } from "~/components/atoms";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -77,6 +78,7 @@ export default function Home() {
               <TableHead>Arrival</TableHead>
               <TableHead>Port of loading</TableHead>
               <TableHead>Port of discharge</TableHead>
+              <TableHead>Unit Types</TableHead>
               <TableHead>Vessel</TableHead>
               <TableHead>&nbsp;</TableHead>
             </TableRow>
@@ -95,6 +97,29 @@ export default function Home() {
                 </TableCell>
                 <TableCell>{voyage.portOfLoading}</TableCell>
                 <TableCell>{voyage.portOfDischarge}</TableCell>
+                <TableCell>
+                  <Popover
+                    title={voyage.unitTypes.length.toString()}
+                    infoText="Click to see more details"
+                  >
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Unit Type</TableHead>
+                          <TableHead>Default Length</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {voyage.unitTypes.map((unitType) => (
+                          <TableRow key={unitType.id}>
+                            <TableCell>{unitType.name}</TableCell>
+                            <TableCell>{unitType.defaultLength}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Popover>
+                </TableCell>
                 <TableCell>{voyage.vessel.name}</TableCell>
                 <TableCell>
                   <Button
