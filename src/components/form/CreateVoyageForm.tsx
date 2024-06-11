@@ -89,8 +89,9 @@ const CreateVoyageForm: FunctionComponent<CreateVoyageFormProps> = ({
     >
       {({ handleSubmit, formState: { dirtyFields, isSubmitting } }) => {
         const dirtyFieldsToPass =
-          dirtyFields.portOfDischarge && dirtyFields.portOfLoading;
-        // dirtyFields.vessel;
+          dirtyFields.portOfDischarge &&
+          dirtyFields.portOfLoading &&
+          dirtyFields.vessel;
 
         return (
           <form
