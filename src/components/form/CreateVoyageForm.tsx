@@ -41,7 +41,7 @@ const CreateVoyageForm: FunctionComponent<CreateVoyageFormProps> = ({
   });
 
   const mutation = useMutation({
-    mutationFn: async (voyage: any) => {
+    mutationFn: async (voyage: object) => {
       return dfdsApi.createVoyage(voyage);
     },
     onSuccess: async () => {

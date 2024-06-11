@@ -13,7 +13,7 @@ interface FormTextFieldProps {
   name: string;
   label: string;
   id?: string;
-};
+}
 
 const FormTextField: FunctionComponent<FormTextFieldProps> = ({
   name,

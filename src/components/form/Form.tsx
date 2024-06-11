@@ -38,8 +38,10 @@ const Form = <T,>({ form, children, schema, onSubmit }: FormProps<T>) => {
              * the value of the input as an empty string would still be interpreted as an accepted value by zod.
              */
             Object.keys(values).forEach((key) => {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore In this case the check for an empty string is sufficient
               if (values[key] === "") {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore We already checked for the existence of the key in the check above
                 delete values[key];
               }
@@ -51,7 +53,6 @@ const Form = <T,>({ form, children, schema, onSubmit }: FormProps<T>) => {
   );
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <FormProvider {...methods}>
       {typeof children === "function"
         ? children({

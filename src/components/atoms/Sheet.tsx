@@ -2,13 +2,10 @@ import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import {
   Sheet as SheetComponent,
-  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetDescription,
-  SheetFooter,
-  SheetClose,
 } from "../ui/sheet";
 
 interface SheetProps {

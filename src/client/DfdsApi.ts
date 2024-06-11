@@ -32,7 +32,7 @@ export class DfdsApi {
     return this.get<ReturnType>("/api/voyage/getAll");
   }
 
-  public async createVoyage(voyage: any) {
+  public async createVoyage(voyage: object) {
     const path = "/api/voyage/create";
     console.log(voyage);
     const { data, status } = await this.instance.post(path, {
