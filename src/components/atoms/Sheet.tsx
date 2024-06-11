@@ -30,7 +30,7 @@ const Sheet: FunctionComponent<SheetProps> = ({
       <Button variant="outline" onClick={() => setOpen(true)}>
         {buttonTitle}
       </Button>
-      <SheetContent>
+      <SheetContent className="overflow-scroll">
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
           <SheetDescription>{description}</SheetDescription>
